@@ -1,5 +1,6 @@
 import { createContext, FormEvent, useContext, useEffect, useState } from 'react'
 import './App.css'
+import { TodoItem } from './components/TodoItem';
 
 export type Todo = {
   id: string;
@@ -25,23 +26,6 @@ function App() {
     setNewTodoTitle('');
   }
 
-  const handleDelete = (idToDelete: string) => {
-    const newTodos = todos.filter(todo => todo.id !== idToDelete);
-    console.log('updated todos', newTodos);
-    setTodos(newTodos);
-  }
-
-  const handleCheck = (id: string, checked: boolean) => {
-    const newTodos = todos.map(todo => {
-      if (todo.id === id) {
-        return { ...todo, completed: checked }
-      }
-      return todo;
-    });
-    console.log('newTodos', newTodos);
-    setTodos(newTodos);
-  }
-
   return (
     <TodoContext.Provider value={{ todos, setTodos }}>
       <h3>Todo app</h3>
@@ -53,13 +37,7 @@ function App() {
         {todos.length === 0 && 'No todos'}
         {todos.map((todo) => {
           return (
-            <li key={todo.id}>
-              <input type='checkbox' id={todo.id} checked={todo.completed} onChange={(e) => handleCheck(todo.id, e.target.checked)} />
-              <label htmlFor={todo.id}>
-                {todo.title}
-              </label>
-              <button onClick={(_e) => handleDelete(todo.id)}>Delete</button>
-            </li>
+            <TodoItem key={todo.id} {...todo} />
           )
         })}
       </ul>
