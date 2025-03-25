@@ -1,11 +1,14 @@
-import { FormEvent, useEffect, useState } from 'react'
+import { createContext, FormEvent, useContext, useEffect, useState } from 'react'
 import './App.css'
 
-type Todo = {
+export type Todo = {
   id: string;
   title: string;
   completed: boolean;
 }
+
+const TodoContext = createContext<any>(undefined);
+export const useTodo = () => useContext(TodoContext);
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -40,7 +43,7 @@ function App() {
   }
 
   return (
-    <>
+    <TodoContext.Provider value={{ todos, setTodos }}>
       <h3>Todo app</h3>
       <form onSubmit={handleAddTodo}>
         <input type='text' value={newTodoTitle} onChange={(e) => setNewTodoTitle(e.target.value)} />
@@ -60,7 +63,7 @@ function App() {
           )
         })}
       </ul>
-    </>
+    </TodoContext.Provider>
   )
 }
 
